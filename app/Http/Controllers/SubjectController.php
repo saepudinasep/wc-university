@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subject;
 use App\Http\Requests\StoreSubjectRequest;
 use App\Http\Requests\UpdateSubjectRequest;
+use App\Http\Resources\SubjectResource;
 
 class SubjectController extends Controller
 {
@@ -13,7 +14,13 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        //
+        $query = Subject::query();
+
+        $subjects = $query->paginate(10);
+
+        return inertia("Subject/Index", [
+            "subjects" => SubjectResource::collection($subjects),
+        ]);
     }
 
     /**
