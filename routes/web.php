@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('teacher', TeacherController::class);
     Route::resource('student', StudentController::class);
     Route::resource('subject', SubjectController::class);
-    Route::resource('class', SchoolClassController::class);
+    Route::resource('school_class', SchoolClassController::class);
     Route::resource('schedule', ScheduleController::class);
     Route::resource('study_group', StudyGroupController::class);
     Route::resource('study_group_member', StudyGroupMemberController::class);

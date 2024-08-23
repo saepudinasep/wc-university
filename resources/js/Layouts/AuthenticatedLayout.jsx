@@ -36,7 +36,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 <NavLink href={route('study_group.index')} active={route().current('study_group.index')}>
                   Study Group
                 </NavLink>
-                <NavLink href={route('class.index')} active={route().current('class')}>
+                <NavLink href={route('school_class.index')} active={route().current('school_class.index')}>
                   Classes
                 </NavLink>
                 <NavLink href={route('student_class.index')} active={route().current('student_class.index')}>

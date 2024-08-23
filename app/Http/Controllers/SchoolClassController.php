@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SchoolClass;
 use App\Http\Requests\StoreSchoolClassRequest;
 use App\Http\Requests\UpdateSchoolClassRequest;
+use App\Http\Resources\SchoolClassResource;
 
 class SchoolClassController extends Controller
 {
@@ -13,7 +14,13 @@ class SchoolClassController extends Controller
      */
     public function index()
     {
-        //
+        $query = SchoolClass::query();
+
+        $schoolClass = $query->paginate(10);
+
+        return inertia("SchoolClass/Index", [
+            "schoolClass" => SchoolClassResource::collection($schoolClass),
+        ]);
     }
 
     /**

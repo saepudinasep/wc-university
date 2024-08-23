@@ -14,6 +14,10 @@ class SchoolClassResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'class_name' => $this->class_name,
+            'academic_year' => $this->academic_year,
+        ];
     }
 }
