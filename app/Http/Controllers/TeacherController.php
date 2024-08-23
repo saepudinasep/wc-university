@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use App\Http\Resources\TeacherResource;
 
 class TeacherController extends Controller
 {
@@ -13,7 +14,13 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        $query = Teacher::query();
+
+        $teachers = $query->paginate(10);
+
+        return inertia("Teacher/Index", [
+            "teachers" => TeacherResource::collection($teachers),
+        ]);
     }
 
     /**
