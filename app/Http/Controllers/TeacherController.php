@@ -16,6 +16,9 @@ class TeacherController extends Controller
     {
         $query = Teacher::query();
 
+        $sortFields = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
         }
@@ -24,7 +27,7 @@ class TeacherController extends Controller
             $query->where("gender", request("gender"));
         }
 
-        $teachers = $query->paginate(10);
+        $teachers = $query->orderBy($sortFields, $sortDirection)->paginate(10);
 
         return inertia("Teacher/Index", [
             "teachers" => TeacherResource::collection($teachers),

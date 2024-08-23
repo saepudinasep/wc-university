@@ -4,6 +4,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import { GENDER_TEXT_MAP } from "../constans";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid'
 
 export default function index({ auth, teachers, queryParams = null }) {
 
@@ -22,6 +23,21 @@ export default function index({ auth, teachers, queryParams = null }) {
   const onKeyPress = (name, e) => {
     if (e.key !== 'Enter') return;
     searchFieldChanged(name, e.target.value);
+  }
+
+  const sortChanged = (name) => {
+    if (name === queryParams.sort_field) {
+      if (queryParams.sort_direction === "asc") {
+        queryParams.sort_direction = "desc";
+      } else {
+        queryParams.sort_direction = "asc";
+      }
+    } else {
+      queryParams.sort_field = name;
+      queryParams.sort_direction = "asc";
+    }
+
+    router.get(route('teacher.index'), queryParams);
   }
 
   return (
@@ -43,7 +59,15 @@ export default function index({ auth, teachers, queryParams = null }) {
                   <tr className="text-nowrap">
                     <th className="px-3 py-3">No</th>
                     <th className="px-3 py-3">Photo</th>
-                    <th className="px-3 py-3">Name</th>
+                    <th onClick={e => sortChanged('name')}>
+                      <div className="px-3 py-3 flex items-center justify-between gap-1 cursor-pointer">
+                        Name
+                        <div>
+                          <ChevronUpIcon className="w-4" />
+                          <ChevronDownIcon className="w-4 -mt-2" />
+                        </div>
+                      </div>
+                    </th>
                     <th className="px-3 py-3">Gender</th>
                     <th className="px-3 py-3">Email</th>
                     <th className="px-3 py-3">Actions</th>
@@ -56,6 +80,7 @@ export default function index({ auth, teachers, queryParams = null }) {
                     <th className="px-3 py-3">
                       <TextInput
                         className="w-full"
+                        defaultValue={queryParams.name}
                         placeholder="Teacher Name"
                         onBlur={e => searchFieldChanged('name', e.target.value)}
                         onKeyPress={e => onKeyPress('name', e)}
