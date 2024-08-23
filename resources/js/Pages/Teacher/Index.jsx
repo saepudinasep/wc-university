@@ -1,8 +1,29 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
+import { GENDER_TEXT_MAP } from "../constans";
+import TextInput from "@/Components/TextInput";
+import SelectInput from "@/Components/SelectInput";
 
-export default function index({ auth, teachers }) {
+export default function index({ auth, teachers, queryParams = null }) {
+
+  queryParams = queryParams || {}
+
+  const searchFieldChanged = (name, value) => {
+    if (value) {
+      queryParams[name] = value
+    } else {
+      delete queryParams[name]
+    }
+
+    router.get(route('teacher.index'), queryParams);
+  }
+
+  const onKeyPress = (name, e) => {
+    if (e.key !== 'Enter') return;
+    searchFieldChanged(name, e.target.value);
+  }
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -27,6 +48,31 @@ export default function index({ auth, teachers }) {
                     <th className="px-3 py-3">Email</th>
                     <th className="px-3 py-3">Actions</th>
                   </tr>
+                  <tr>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3">
+                      <TextInput
+                        className="w-full"
+                        placeholder="Teacher Name"
+                        onBlur={e => searchFieldChanged('name', e.target.value)}
+                        onKeyPress={e => onKeyPress('name', e)}
+                      />
+                    </th>
+                    <th className="px-3 py-3">
+                      <SelectInput
+                        className="w-full"
+                        defaultValue={queryParams.gender}
+                        onChange={e => searchFieldChanged('gender', e.target.value)}
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </SelectInput>
+                    </th>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
+                  </tr>
                 </thead>
                 <tbody>
                   {teachers.data.map((teacher, index) => (
@@ -38,7 +84,7 @@ export default function index({ auth, teachers }) {
                         <img src={teacher.photo} alt="" className="w-16" />
                       </td>
                       <td className="px-3 py-2">{teacher.name}</td>
-                      <td className="px-3 py-2">{teacher.gender}</td>
+                      <td className="px-3 py-2">{GENDER_TEXT_MAP[teacher.gender]}</td>
                       <td className="px-3 py-2">{teacher.user.email}</td>
                       <td className="px-3 py-2">
                         <Link href={route('teacher.edit', teacher.id)}

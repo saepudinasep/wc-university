@@ -16,10 +16,19 @@ class TeacherController extends Controller
     {
         $query = Teacher::query();
 
+        if (request("name")) {
+            $query->where("name", "like", "%" . request("name") . "%");
+        }
+
+        if (request("gender")) {
+            $query->where("gender", request("gender"));
+        }
+
         $teachers = $query->paginate(10);
 
         return inertia("Teacher/Index", [
             "teachers" => TeacherResource::collection($teachers),
+            "queryParams" => request()->query() ?: null,
         ]);
     }
 
