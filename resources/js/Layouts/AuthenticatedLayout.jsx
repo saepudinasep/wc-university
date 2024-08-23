@@ -24,25 +24,25 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                   Dashboard
                 </NavLink>
-                <NavLink href={route('teacher.index')} active={route().current('teacher')}>
+                <NavLink href={route('teacher.index')} active={route().current('teacher.index')}>
                   Teachers
                 </NavLink>
-                <NavLink href={route('student.index')} active={route().current('student')}>
+                <NavLink href={route('student.index')} active={route().current('student.index')}>
                   Students
                 </NavLink>
-                <NavLink href={route('subject.index')} active={route().current('subject')}>
+                <NavLink href={route('subject.index')} active={route().current('subject.index')}>
                   Subjects
                 </NavLink>
-                <NavLink href={route('study_group.index')} active={route().current('study_group')}>
+                <NavLink href={route('study_group.index')} active={route().current('study_group.index')}>
                   Study Group
                 </NavLink>
                 <NavLink href={route('class.index')} active={route().current('class')}>
                   Classes
                 </NavLink>
-                <NavLink href={route('student_class.index')} active={route().current('student_class')}>
+                <NavLink href={route('student_class.index')} active={route().current('student_class.index')}>
                   Student Classes
                 </NavLink>
-                <NavLink href={route('schedule.index')} active={route().current('schedule')}>
+                <NavLink href={route('schedule.index')} active={route().current('schedule.index')}>
                   Schedules
                 </NavLink>
               </div>

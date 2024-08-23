@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Http\Resources\StudentResource;
 
 class StudentController extends Controller
 {
@@ -13,7 +14,13 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $query = Student::query();
+
+        $students = $query->paginate(10);
+
+        return inertia("Student/Index", [
+            "students" => StudentResource::collection($students),
+        ]);
     }
 
     /**
