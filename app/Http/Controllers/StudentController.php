@@ -16,10 +16,19 @@ class StudentController extends Controller
     {
         $query = Student::query();
 
+        if (request("name")) {
+            $query->where("name", "like", "%" . request("name") . "%");
+        }
+
+        if (request("gender")) {
+            $query->where("gender", request("gender"));
+        }
+
         $students = $query->paginate(10);
 
         return inertia("Student/Index", [
             "students" => StudentResource::collection($students),
+            "queryParams" => request()->query() ?: null,
         ]);
     }
 

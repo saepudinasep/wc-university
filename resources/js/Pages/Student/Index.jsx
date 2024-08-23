@@ -1,8 +1,28 @@
 import Pagination from "@/Components/Pagination";
+import SelectInput from "@/Components/SelectInput";
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
-export default function index({ auth, students }) {
+export default function index({ auth, students, queryParams = null }) {
+
+  queryParams = queryParams || {}
+
+  const searchFieldChanged = (name, value) => {
+    if (value) {
+      queryParams[name] = value
+    } else {
+      delete queryParams[name]
+    }
+
+    router.get(route('student.index'), queryParams);
+  }
+
+  const onKeyPress = (name, e) => {
+    if (e.key !== 'Enter') return;
+    searchFieldChanged(name, e.target.value);
+  }
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -27,6 +47,31 @@ export default function index({ auth, students }) {
                     <th className="px-3 py-3">Gender</th>
                     <th className="px-3 py-3">Email</th>
                     <th className="px-3 py-3">Actions</th>
+                  </tr>
+                  <tr>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3">
+                      <TextInput
+                        className="w-full"
+                        placeholder="Student Name"
+                        onBlur={e => searchFieldChanged('name', e.target.value)}
+                        onKeyPress={e => onKeyPress('name', e)}
+                      />
+                    </th>
+                    <th className="px-3 py-3">
+                      <SelectInput
+                        className="w-full"
+                        defaultValue={queryParams.gender}
+                        onChange={e => searchFieldChanged('gender', e.target.value)}
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                      </SelectInput>
+                    </th>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
                   </tr>
                 </thead>
                 <tbody>
