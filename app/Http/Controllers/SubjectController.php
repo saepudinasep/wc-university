@@ -16,10 +16,18 @@ class SubjectController extends Controller
     {
         $query = Subject::query();
 
-        $subjects = $query->paginate(10);
+        $sortFields = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
+        if (request("name")) {
+            $query->where("name", "like", "%" . request("name") . "%");
+        }
+
+        $subjects = $query->orderBy($sortFields, $sortDirection)->paginate(10);
 
         return inertia("Subject/Index", [
             "subjects" => SubjectResource::collection($subjects),
+            "queryParams" => request()->query() ?: null,
         ]);
     }
 

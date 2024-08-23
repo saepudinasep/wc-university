@@ -16,10 +16,18 @@ class SchoolClassController extends Controller
     {
         $query = SchoolClass::query();
 
-        $schoolClass = $query->paginate(10);
+        $sortFields = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
+        if (request("name")) {
+            $query->where("class_name", "like", "%" . request("name") . "%");
+        }
+
+        $schoolClass = $query->orderBy($sortFields, $sortDirection)->paginate(10);
 
         return inertia("SchoolClass/Index", [
             "schoolClass" => SchoolClassResource::collection($schoolClass),
+            "queryParams" => request()->query() ?: null,
         ]);
     }
 

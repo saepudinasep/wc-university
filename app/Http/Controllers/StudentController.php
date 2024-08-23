@@ -16,6 +16,9 @@ class StudentController extends Controller
     {
         $query = Student::query();
 
+        $sortFields = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
         }
@@ -24,7 +27,7 @@ class StudentController extends Controller
             $query->where("gender", request("gender"));
         }
 
-        $students = $query->paginate(10);
+        $students = $query->orderBy($sortFields, $sortDirection)->paginate(10);
 
         return inertia("Student/Index", [
             "students" => StudentResource::collection($students),

@@ -1,8 +1,43 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
+import TextInput from "@/Components/TextInput";
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
-export default function index({ auth, schoolClass }) {
+export default function index({ auth, schoolClass, queryParams = null }) {
+
+  queryParams = queryParams || {}
+
+  const searchFieldChanged = (name, value) => {
+    if (value) {
+      queryParams[name] = value
+    } else {
+      delete queryParams[name]
+    }
+
+    router.get(route('school_class.index'), queryParams);
+  }
+
+  const onKeyPress = (name, e) => {
+    if (e.key !== 'Enter') return;
+    searchFieldChanged(name, e.target.value);
+  }
+
+  const sortChanged = (name) => {
+    if (name === queryParams.sort_field) {
+      if (queryParams.sort_direction === "asc") {
+        queryParams.sort_direction = "desc";
+      } else {
+        queryParams.sort_direction = "asc";
+      }
+    } else {
+      queryParams.sort_field = name;
+      queryParams.sort_direction = "asc";
+    }
+
+    router.get(route('school_class.index'), queryParams);
+  }
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -22,9 +57,41 @@ export default function index({ auth, schoolClass }) {
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className="text-nowrap">
                     <th className="px-3 py-3">No</th>
-                    <th className="px-3 py-3">Class Name</th>
-                    <th className="px-3 py-3">Academic Year</th>
+                    <th onClick={e => sortChanged('class_name')}>
+                      <div className="px-3 py-3 flex items-center justify-between gap-1 cursor-pointer">
+                        Class Name
+                        <div>
+                          <ChevronUpIcon className="w-4" />
+                          <ChevronDownIcon className="w-4 -mt-2" />
+                        </div>
+                      </div>
+                    </th>
+                    <th onClick={e => sortChanged('academic_year')}>
+                      <div className="px-3 py-3 flex items-center justify-between gap-1 cursor-pointer">
+                        Academic Year
+                        <div>
+                          <ChevronUpIcon className="w-4" />
+                          <ChevronDownIcon className="w-4 -mt-2" />
+                        </div>
+                      </div>
+                    </th>
                     <th className="px-3 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                  <tr className="text-nowrap">
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3">
+                      <TextInput
+                        className="w-full"
+                        defaultValue={queryParams.name}
+                        placeholder="Class Name"
+                        onBlur={e => searchFieldChanged('name', e.target.value)}
+                        onKeyPress={e => onKeyPress('name', e)}
+                      />
+                    </th>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
                   </tr>
                 </thead>
                 <tbody>

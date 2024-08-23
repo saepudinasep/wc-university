@@ -4,7 +4,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import { GENDER_TEXT_MAP } from "../constans";
 import TextInput from "@/Components/TextInput";
 import SelectInput from "@/Components/SelectInput";
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid'
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
 export default function index({ auth, teachers, queryParams = null }) {
 
